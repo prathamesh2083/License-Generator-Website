@@ -1,0 +1,49 @@
+.form-group{
+    min-width: 300px;
+    
+    padding: 5px;
+    display: flex;
+    margin: 5px;
+}
+.form-group input{
+    border: 1px solid rgb(133, 131, 131);
+    box-shadow: 0px 0px 5px 0px #9f9c9c;
+}
+#exampleFormControlFile1{
+    box-shadow: 0px 0px 0px 0px #9f9c9c;
+}
+label{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 50px;
+    width: 120px;
+}
+
+input{
+    /* border: 1px solid black; */
+    height: 50px;
+}
+.container{
+    
+   
+    border: 1px solid black;
+    box-shadow: 0px 0px 30px 0px #d6d3d3;
+   min-width: 400px;
+    border-radius: 15px;
+    opacity: 1;
+    text-align: center;
+    margin-top: 50px;
+    width: 50%;
+   
+   
+    padding: 40px;
+}
+
+
+.comb{
+    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}

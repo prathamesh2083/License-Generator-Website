@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { useState } from "react";
 import toast, { Toaster, ToastBar } from "react-hot-toast";
-import "../styles/Login.css";
+
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-
+const style=require("../styles/Login.css");
 export default function Login() {
-  const {storetokenInLS}=useContext(AuthContext);
+  const {storetokenInLS,User,setUser}=useContext(AuthContext);
   const Navigate = useNavigate();
   const [formdata, setformdata] = useState({
     password: "",
@@ -40,14 +40,19 @@ export default function Login() {
           
          
           if (res.success === true) {
-            
+            const token=res.token;
             storetokenInLS(res.token);
+            
+           
+            
+             
+             
             toast.success("Login Successfull", {
-              duration: 2000,
+              duration: 400,
             });
             setTimeout(() => {
               Navigate("/");
-            }, 500);
+            }, 300);
           } else {
             toast.error(res.message);
           }
@@ -62,7 +67,7 @@ export default function Login() {
   };
 
   return (
-    <div className="login_page">
+    <div className="login_page" style={style}>
       <div
         className="login-page-container d-flex justify-content-center align-items-center container  "
         style={{ width: "50%" }}

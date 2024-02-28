@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const mailSender = require("../utils/mailsender");
+const {RegistrationMailSender} = require("../utils/mailsender");
 const userSchema = new mongoose.Schema({
   name: {
     type: "String",
@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema({
 });
 async function sendVerificationEmail(email, otp) {
   try {
-    const mailResponse = await mailSender(
+    const mailResponse = await RegistrationMailSender(
       email,
       "Welcome to License Generator",
       otp

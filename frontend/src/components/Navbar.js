@@ -3,12 +3,13 @@ import "../styles/Navbar.css";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import profile from "../images/myprofile.png";
 import logo from "../images/logo.png";
-import Cookies from "js-cookie";
+
 import { AuthContext } from "../context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
 export default function Navbar() {
   const Navigate=useNavigate();
-  const {isLoggedUser,logoutUser}=useContext(AuthContext);
+  const {isLoggedUser,logoutUser,User}=useContext(AuthContext);
+  const url = `https://api.dicebear.com/5.x/initials/svg?seed=${User.name}`;
   const handlelogout=(event)=>{
       logoutUser();
       toast.success("Logout Successfull");
@@ -16,7 +17,7 @@ export default function Navbar() {
   }
   return (
     <div id="navbar">
-    <Toaster></Toaster>
+      <Toaster></Toaster>
       <nav class="navbar navbar-expand-lg px-5 ">
         <div class="container-fluid">
           <div className="Logo">Digital World</div>
@@ -50,10 +51,9 @@ export default function Navbar() {
               </li>
               {isLoggedUser ? (
                 <li class="nav-item mx-4">
-                  <div 
+                  <div
                     onClick={handlelogout}
                     class=" hover-underline-animation nav-link "
-                    to="/Login"
                   >
                     Logout
                   </div>
@@ -80,38 +80,53 @@ export default function Navbar() {
                   </Link>
                 </li>
               )}
-
-              <li class="nav-item dropdown">
-                <Link
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <img
-                    src={profile}
-                    style={{ width: "40px", borderRadius: "50%" }}
-                  ></img>
-                </Link>
-                <ul class="dropdown-menu" id="menu">
-                  <li>
-                    <Link class="dropdown-item" to={"/Profile"}>
-                      Profile
-                    </Link>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      Update Profile
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      Download License
-                    </a>
-                  </li>
-                </ul>
-              </li>
+              {isLoggedUser ? (
+                <li class="nav-item dropdown">
+                  <Link
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {isLoggedUser ? (
+                      <img
+                        src={url}
+                        style={{
+                          width: "40px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          backgroundPosition: "center",
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "cover",
+                        }}
+                      ></img>
+                    ) : (
+                      <div></div>
+                    )}
+                  </Link>
+                  <ul class="dropdown-menu" id="menu">
+                    <li>
+                      <Link class="dropdown-item" to={"/Profile"}>
+                        Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        Update Profile
+                      </a>
+                    </li>
+                    {User.licenseImage? <li>
+                      <a class="dropdown-item" href="#">
+                        Download License
+                      </a>
+                    </li>:<div></div>}
+                   
+                  </ul>
+                </li>
+              ) : (
+                <div></div>
+              )}
             </ul>
           </div>
         </div>

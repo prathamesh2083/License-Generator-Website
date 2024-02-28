@@ -2,6 +2,8 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const File = require("../models/File");
 const jwt = require("jsonwebtoken");
+const OTP = require("../models/OTP");
+const otpGen = require("otp-generator");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 
@@ -11,30 +13,71 @@ async function uploadFileToCloudinary(file, folder, quality) {
   options.resource_type = "auto";
   return await cloudinary.uploader.upload(file.tempFilePath, options);
 }
+exports.sendOTP  =async (req,res)=>  {
+  try {
+    const email=req.body;
+    let otp = otpGen.generate(6, {
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false,
+      specialChars: false,
+    });
+    console.log(otp);
+    const payload = { email, otp };
+    console.log("at send otp ",email,otp);
+    const sendotp = await OTP.create(payload);
+    return res.status(200).json({
+      success: true,
+      otp:otp,
+      message: "otp sent successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "otp sent unsuccessfull",
+    });
+  }
+};
 
 exports.register = async (req, res) => {
-   
   try {
-    
-    const { name, email, address, birthDate, phone, gender, password } =req.body;
+    const { name, email, address, birthDate, phone, gender, password,otp } =
+      req.body;
     const profileImage = req.files.profileImage;
+    const already_exist = await User.findOne({ email: email });
+   if (already_exist) {
+     return res.status(500).json({
+       success: false,
+       data: null,
+       message: "Email id already exist",
+     });
+   }
+    if(phone.length!=10){
+      res.status(500).json({
+         success:false,
+         message:"Invalid phone number"
+      });
+    }
+    
+    const resentotp=await OTP.find({email}).sort({createdAt:-1}).limit(1);
+    if(resentotp!=otp){
+      res.status(500).json({
+        success:false,
+        message:"Enter Correct OTP"
+      })
+    };
     console.log(name, email, address, birthDate, phone, gender, password);
     console.log(profileImage);
-    
+
     // validation
     const supportedTypes = ["jpg", "png", "jpeg"];
-    
+
     const currentType = profileImage.name.split(".")[1].toLowerCase();
     if (true) {
-      const already_exist = await User.findOne({ email: email });
+      
 
-      if (already_exist) {
-        return res.status(500).json({
-          success: false,
-          data: null,
-          message: "Email id already exist",
-        });
-      }
+      
+      
       const response = await uploadFileToCloudinary(profileImage, "prathamesh");
       console.log(response.secure_url);
       let hashpass;
@@ -46,21 +89,23 @@ exports.register = async (req, res) => {
           message: "error in hasing password",
         });
       }
-      let bdate=birthDate.toString();
-     
-     
+      let bdate = birthDate.toString();
+      
+
       const newuser = new User({
         name,
         password: hashpass,
         email,
         address,
-        birthDate:bdate,
+        birthDate: bdate,
         phone,
         gender,
         profileImage: response.secure_url,
       });
       // console.log(newuser);
-       await newuser.save().then(() => {
+      await newuser
+        .save()
+        .then(() => {
           return res.status(200).json({
             success: true,
             data: newuser,
@@ -83,15 +128,14 @@ exports.register = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
-     return res.status(500).json({
-       success: false,
-       message: err,
-     });
+    return res.status(500).json({
+      success: false,
+      message: err,
+    });
   }
 };
 
 exports.login = async (req, res) => {
-
   try {
     const { email, password } = req.body;
     console.log(email, password);
@@ -129,7 +173,6 @@ exports.login = async (req, res) => {
           finduser,
           message: "user login successfull",
         });
-       
       } else {
         res.status(500).json({
           success: false,
@@ -166,3 +209,5 @@ exports.logout = async (req, res) => {
     });
   }
 };
+
+

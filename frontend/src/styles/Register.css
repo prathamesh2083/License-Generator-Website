@@ -6,10 +6,12 @@
     margin: 5px;
 }
 .form-group input{
+    background-color: rgba(249, 248, 249, 0.512);
     border: 1px solid rgb(133, 131, 131);
     box-shadow: 0px 0px 5px 0px #9f9c9c;
 }
-#exampleFormControlFile1{
+#exampleFormControlFile1 {
+    background-color: none;
     box-shadow: 0px 0px 0px 0px #9f9c9c;
 }
 label{

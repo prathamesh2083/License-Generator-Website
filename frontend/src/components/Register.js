@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Register.css";
+// import "../styles/Register.css";
 import axios from "./axios";
 import toast, { Toaster, ToastBar } from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
 import Loader from "./Loader";
+const style=require("../styles/Register.css");
 export default function Registration() {
 
   const {loading,setloading}=useContext(AuthContext);
@@ -18,7 +19,7 @@ export default function Registration() {
     email: "prathamesh.pandit21@pccoepune.org",
     address: "pune",
     phone: "9834670973",
-   
+    otp:"",
     gender: "Male",
   });
   const handlechangeImage=async(event)=>{
@@ -41,16 +42,39 @@ export default function Registration() {
 
   const handlesubmit = async (event) => {
     event.preventDefault();
-
-     const form = new FormData();
-     for (const key in formdata) {
-       form.set(key, formdata[key]);
+     if(profileImage==undefined || profileImage==null){
+       toast.error("Profile image not selected");
+       return;
      }
-     form.set('profileImage',profileImage);
+   
        
     try {
       
       const { name, email, address, birthDate, phone, gender, password } =formdata;
+      
+      // const otpresponse=await fetch("/v1/sendotp",{
+      //   method:"POST",
+      //   body:{
+      //     email:email
+      //   }
+      // }).then((res)=>res.json()).then((res)=>{
+      //   if(res.success){
+      //     formdata.otp=res.otp;
+      //   }
+      //   else{
+      //     toast.error(res.message);
+      //     return;
+      //   }
+      // })
+     
+        const form = new FormData();
+        for (const key in formdata) {
+          form.set(key, formdata[key]);
+        }
+        form.set("profileImage", profileImage);
+
+
+
       setloading(true);
       const response = await fetch("/v1/register", {
         method: "POST",
@@ -60,6 +84,7 @@ export default function Registration() {
         .then((res) => res.json())
         .then((res) => {
           setloading(false);
+
           if (res.success === true) {
             toast.success(res.message);
             setTimeout(() => {
@@ -83,7 +108,7 @@ export default function Registration() {
   };
 
   return (
-    <div style={{width:"100%",height:"100%" ,minHeight:"600px"}}>
+    <div style={style}>
      
       {loading ? (
        <Loader></Loader>
@@ -189,7 +214,7 @@ export default function Registration() {
                 <label>Profile Image</label>
                 <input
                   id="exampleFormControlFile1"
-                  style={{ border: "none" }}
+                  style={{ border: "none",backgroundColor:"none" }}
                   type="file"
                   onChange={handlechangeImage}
                   name="profileImage"

@@ -8,7 +8,7 @@
 .Logo {
     padding: 5px;
     width: 130px;
-    /* font-size: 45px; */
+    
     font-family: 'Whisper', cursive;
     font-weight: bold;
 }
@@ -58,7 +58,7 @@
 
 .hover-underline-animation:hover::after {
     transform: scaleX(1);
-    /* transform-origin: bottom left; */
+    
 }
 
 @media(max-width:992px) {

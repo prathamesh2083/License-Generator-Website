@@ -5,13 +5,12 @@ import axios from "./axios";
 import toast, { Toaster, ToastBar } from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
 import Loader from "./Loader";
-const style=require("../styles/Register.css");
+const style = require("../styles/Register.css");
 export default function Registration() {
-
-  const {loading,setloading}=useContext(AuthContext);
+  const { loading, setloading } = useContext(AuthContext);
 
   const Navigate = useNavigate();
-  const [profileImage,setprofileImage]=useState();
+  const [profileImage, setprofileImage] = useState();
   const [formdata, setformdata] = useState({
     name: "prathamesh",
     password: "123",
@@ -19,39 +18,34 @@ export default function Registration() {
     email: "prathamesh.pandit21@pccoepune.org",
     address: "pune",
     phone: "9834670973",
-    otp:"",
+    otp: "",
     gender: "Male",
   });
-  const handlechangeImage=async(event)=>{
-      
+  const handlechangeImage = async (event) => {
     setprofileImage(event.target.files[0]);
-    
-  }
+  };
   const handlechange = async (event) => {
-   
-      setformdata((prev) => {
-        return {
-          ...prev,
-          [event.target.name]: event.target.value,
-        };
-      });
-    
-      //  console.log(formdata);
-    
+    setformdata((prev) => {
+      return {
+        ...prev,
+        [event.target.name]: event.target.value,
+      };
+    });
+
+    //  console.log(formdata);
   };
 
   const handlesubmit = async (event) => {
     event.preventDefault();
-     if(profileImage==undefined || profileImage==null){
-       toast.error("Profile image not selected");
-       return;
-     }
-   
-       
+    if (profileImage == undefined || profileImage == null) {
+      toast.error("Profile image not selected");
+      return;
+    }
+
     try {
-      
-      const { name, email, address, birthDate, phone, gender, password } =formdata;
-      
+      const { name, email, address, birthDate, phone, gender, password } =
+        formdata;
+
       // const otpresponse=await fetch("/v1/sendotp",{
       //   method:"POST",
       //   body:{
@@ -66,19 +60,17 @@ export default function Registration() {
       //     return;
       //   }
       // })
-     
-        const form = new FormData();
-        for (const key in formdata) {
-          form.set(key, formdata[key]);
-        }
-        form.set("profileImage", profileImage);
 
-
+      const form = new FormData();
+      for (const key in formdata) {
+        form.set(key, formdata[key]);
+      }
+      form.set("profileImage", profileImage);
 
       setloading(true);
       const response = await fetch("/v1/register", {
         method: "POST",
-       
+
         body: form,
       })
         .then((res) => res.json())
@@ -109,10 +101,8 @@ export default function Registration() {
 
   return (
     <div style={style}>
-     
       {loading ? (
-       <Loader></Loader>
-        
+        <Loader></Loader>
       ) : (
         <div className="container d-flex justify-content-center align-items-center ">
           <Toaster>
@@ -214,7 +204,7 @@ export default function Registration() {
                 <label>Profile Image</label>
                 <input
                   id="exampleFormControlFile1"
-                  style={{ border: "none",backgroundColor:"none" }}
+                  style={{ border: "none", backgroundColor: "none" }}
                   type="file"
                   onChange={handlechangeImage}
                   name="profileImage"
@@ -256,7 +246,4 @@ export default function Registration() {
       )}
     </div>
   );
-
-
-
 }

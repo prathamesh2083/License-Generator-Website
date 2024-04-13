@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema({
   licenseImage: {
     type: "String",
   },
+  results:[{
+    type:mongoose.Types.ObjectId,
+    ref:"Result"
+  }]
 });
 async function sendVerificationEmail(email, otp) {
   try {

@@ -4,6 +4,7 @@ const File = require("../models/File");
 const jwt = require("jsonwebtoken");
 const OTP = require("../models/OTP");
 const otpGen = require("otp-generator");
+const Result=require("../models/Result");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 
@@ -209,5 +210,60 @@ exports.logout = async (req, res) => {
     });
   }
 };
+exports.checkResult = async (req, res) => {
+  try {
+     const {correct,attempted,total,percentage,email}=req.body;
+    
+     
+     const result=await Result.create({
+      email:email,
+      attempted,
+      correct,
+      status:percentage>=70?true:false
+      
+     });
+     
+    return res.status(200).json({
+      success:true,
+      data:result,
+      message:"Test submitted successfully"
+     })
+  } catch (err) {
+    console.log(err);
+    return res.status(200).json({
+      success: false,
+      
+      message: "Test submitted failed",
+    });
+  }
+};
+
+
+
+exports.getdata = async (req, res) => {
+  try {
+     const email=req.user.email;
+    console.log("called : ",email);
+     
+     const result=await User.findOne({
+      email:email
+      
+     });
+     console.log("result ",result);
+    return res.status(200).json({
+      success:true,
+      data:result,
+      message:"data fetched successfully"
+     })
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      
+      message: "error in data fetching",
+    });
+  }
+};
+
 
 

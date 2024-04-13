@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import "../styles/Navbar.css";
+
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import profile from "../images/myprofile.png";
-import logo from "../images/logo.png";
+
 
 import { AuthContext } from "../context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
+import  "../styles/Navbar.css";
 export default function Navbar() {
   const Navigate=useNavigate();
   const {isLoggedUser,logoutUser,User}=useContext(AuthContext);
@@ -16,11 +16,11 @@ export default function Navbar() {
       Navigate("/Login");
   }
   return (
-    <div id="navbar">
+    <div >
       <Toaster></Toaster>
       <nav class="navbar navbar-expand-lg px-5 ">
         <div class="container-fluid">
-          <div className="Logo">Digital World</div>
+          <div className="Logo bg-blue-500">Digital World</div>
           <button
             style={{ margin: "5px" }}
             class="navbar-toggler"

@@ -10,24 +10,29 @@ import Test from "./Test";
 import Profile from "./Profile";
 import PrivateRoute from "./PrivateRoute";
 import EnterOtp from "./EnterOtp";
+import Certificate from "./Certificate";
+import LicenseRoute from "./LicenseRoute";
 export default function App() {
   return (
     <div>
-      
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home></Home>}></Route>
-          <Route path="/Login" element={<Login></Login>}></Route>
-          <Route path="/Register" element={<Register></Register>}></Route>
-          
-          <Route element={<PrivateRoute />}>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home></Home>}></Route>
 
-              <Route element={<Test />} path="/Test" />
-            
-          </Route>
-          <Route path="/EnterOtp" element={<EnterOtp></EnterOtp>}></Route>
-        </Routes>
-     
+        <Route path="/Login" element={<Login></Login>}></Route>
+        <Route path="/Register" element={<Register></Register>}></Route>
+
+       
+       
+        <Route element={<PrivateRoute />}>
+          <Route
+            path="/Certificate"
+            element={<Certificate></Certificate>}
+          ></Route>
+          <Route element={<Test />} path="/Test" />
+        </Route>
+        <Route path="/EnterOtp" element={<EnterOtp></EnterOtp>}></Route>
+      </Routes>
     </div>
   );
 }

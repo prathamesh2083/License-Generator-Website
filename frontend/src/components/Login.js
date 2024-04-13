@@ -4,9 +4,9 @@ import toast, { Toaster, ToastBar } from "react-hot-toast";
 
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-const style=require("../styles/Login.css");
+const style = require("../styles/Login.css");
 export default function Login() {
-  const {storetokenInLS,User,setUser}=useContext(AuthContext);
+  const { storetokenInLS, User, setUser } = useContext(AuthContext);
   const Navigate = useNavigate();
   const [formdata, setformdata] = useState({
     password: "",
@@ -37,16 +37,10 @@ export default function Login() {
       })
         .then((res) => res.json())
         .then((res) => {
-          
-         
           if (res.success === true) {
-            const token=res.token;
+            const token = res.token;
             storetokenInLS(res.token);
-            
-           
-            
-             
-             
+
             toast.success("Login Successfull", {
               duration: 400,
             });

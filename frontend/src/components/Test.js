@@ -171,12 +171,13 @@ const Navigate = useNavigate();
         Correct Answer: ${correct}\n
         Incorrect Answer: ${attempted - correct}`;
 
-    // alert(message);
+    alert(message);
     const marks=correct*100/que.length;
     setresult(marks);
     
    
     try{
+
       console.log("test ",User.email);
            const response = await fetch("/v1/checkResult", {
              method: "POST",
